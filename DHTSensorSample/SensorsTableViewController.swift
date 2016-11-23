@@ -8,7 +8,16 @@
 
 import UIKit
 
-class SensorsTableViewController: UITableViewController {
+class SensorsTableViewController: UITableViewController, GCDAsyncUdpSocketDelegate {
+    
+    let address = "255.255.255.255"
+    let port:UInt16 = 8181
+    let broadcastMessage = "query"
+    var socket:GCDAsyncUdpSocket!
+    var sensors = [SensorItem]();
+    
+    @IBAction func refreshBtnPressed(_ sender: AnyObject) {
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -92,4 +101,11 @@ class SensorsTableViewController: UITableViewController {
     }
     */
 
+}
+
+struct SensorItem{
+    var temperature = ""
+    var humidity = ""
+    var sensorName = ""
+    var sensorIP = ""
 }
