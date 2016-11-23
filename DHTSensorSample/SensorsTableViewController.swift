@@ -14,9 +14,26 @@ class SensorsTableViewController: UITableViewController, GCDAsyncUdpSocketDelega
     let port:UInt16 = 8181
     let broadcastMessage = "query"
     var socket:GCDAsyncUdpSocket!
-    var sensors = [SensorItem]();
+    var sensors = [SensorItem]()
     
     @IBAction func refreshBtnPressed(_ sender: AnyObject) {
+        // Clear current list
+        sensors.removeAll()
+        self.tableView.reloadData()
+        
+        // Prepare broadcast data
+        let broadcastData = broadcastMessage.data(using: .utf8)
+        
+        // Prepare socket
+        socket = GCDAsyncUdpSocket(delegate: self, delegateQueue: DispatchQueue.main)
+        
+        do {
+            try socket.bind(toPort: port)
+            try socket.enableBroadcast(true)
+            try socket.beginReceiving()
+        } catch {
+            print(error)
+        }
     }
 
     override func viewDidLoad() {
